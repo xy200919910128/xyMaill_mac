@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://172.31.25.28:3306/xymaill_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+  application:
+        name: nacos-maill-product
+  cloud:
+       nacos:
+         discovery:
+            server-addr: 172.31.25.28:8848
+  jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+  thymeleaf:
+      cache: false
+      prefix: classpath:/templates/
+      suffix: .html
+  redis:
+      host: 172.31.25.28
+      port: 6379
+server-url:
+  nacos-user-service: http://maill-product
+
+server:
+  port: 10000
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  #configuration:
+      #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+

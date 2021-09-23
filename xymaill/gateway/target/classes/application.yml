@@ -1,0 +1,65 @@
+spring:
+  application:
+        name: nacos-maill-gateway
+  cloud:
+      nacos:
+         discovery:
+            server-addr: 172.31.25.28:8848
+      gateway:
+              discovery:
+                locator:
+                  enabled: true # 开启从注册中心动态创建路由的功能，利用微服务名称进行路由
+              routes:
+              - id: provide_product # 路由的id,没有规定规则但要求唯一,建议配合服务名
+                #匹配后提供服务的路由地址
+              #uri: cloud-zk-provider-dep8005
+                uri: lb://nacos-maill-product   #lb一定是要写死的  表示启用gateway的负载均衡功能
+                predicates:    #此时通过网关应该访问的后台项目路径为 http://localhost:88/api/xy_admin/captcha.jpg
+                   - Path=/api/product/**    #将/api/**这个路径 转到xy-admin 项目中  后台项目的application name叫 xy-admin  然后 后台 还为项目起了一个项目名称 叫 xy_admin
+                filters:
+                   - RewritePath=/api/product/(?<segment>.*),/maillproduct/$\{segment}    #重写
+
+              - id: thirdParty_adi # 路由的id,没有规定规则但要求唯一,建议配合服务名
+                uri: lb://nacos-maill-thirdParty   #lb一定是要写死的  表示启用gateway的负载均衡功能
+                predicates:    #此时通过网关应该访问的后台项目路径为 http://localhost:88/api/xy_admin/captcha.jpg
+                   - Path=/api/thirdParty/**    #将/api/**这个路径 转到xy-admin 项目中  后台项目的application name叫 xy-admin  然后 后台 还为项目起了一个项目名称 叫 xy_admin
+                filters:
+                   - RewritePath=/api/thirdParty/(?<segment>.*),/maillThirdParty/$\{segment}    #重写 $前面会把原路径覆盖  后面会把字符串 原样添加
+
+              - id: member_adi # 路由的id,没有规定规则但要求唯一,建议配合服务名
+                uri: lb://nacos-maill-member   #lb一定是要写死的  表示启用gateway的负载均衡功能
+                predicates:    #此时通过网关应该访问的后台项目路径为 http://localhost:88/api/xy_admin/captcha.jpg
+                   - Path=/api/member/**    #将/api/**这个路径 转到xy-admin 项目中  后台项目的application name叫 xy-admin  然后 后台 还为项目起了一个项目名称 叫 xy_admin
+                filters:
+                   - RewritePath=/api/(?<segment>.*),/$\{segment}    #重写 $前面会把原路径覆盖  后面会把字符串 原样添加
+
+              - id: ware_adi # 路由的id,没有规定规则但要求唯一,建议配合服务名
+                uri: lb://nacos-maill-ware    #lb一定是要写死的  表示启用gateway的负载均衡功能
+                predicates:    #此时通过网关应该访问的后台项目路径为 http://localhost:88/api/xy_admin/captcha.jpg
+                   - Path=/api/ware/**    #将/api/**这个路径 转到xy-admin 项目中  后台项目的application name叫 xy-admin  然后 后台 还为项目起了一个项目名称 叫 xy_admin
+                filters:
+                   - RewritePath=/api/(?<segment>.*),/$\{segment}    #重写 $前面会把原路径覆盖  后面会把字符串 原样添加
+
+              - id: provide_adi # 路由的id,没有规定规则但要求唯一,建议配合服务名
+               #匹配后提供服务的路由地址
+                uri: lb://xy-admin   #lb一定是要写死的  表示启用gateway的负载均衡功能
+                predicates:    #此时通过网关应该访问的后台项目路径为 http://localhost:88/api/xy_admin/captcha.jpg
+                   - Path=/api/**     #将/api/**这个路径 转到xy-admin 项目中  后台项目的application name叫 xy-admin  然后 后台 还为项目起了一个项目名称 叫 xy_admin
+                filters:
+                   - RewritePath=/api/(?<segment>.*),/xy_admin/$\{segment}    #重写
+              - id: host_front_product # 路由的id,没有规定规则但要求唯一,建议配合服务名
+             #匹配后提供服务的路由地址
+                uri: lb://nacos-maill-product   #lb一定是要写死的  表示启用gateway的负载均衡功能
+                predicates:    #此时**.xymaill.com通过网关访问的所有xymaill.com 或者xymaill.com子路径的 都会被映射到nacos-maill-product服务中
+                   - Host=xymaill.com,item.xymaill.com
+              - id: host_front_elasticsearch # 路由的id,没有规定规则但要求唯一,建议配合服务名
+             #匹配后提供服务的路由地址
+                uri: lb://xymaill-nacos-elasticsearch   #lb一定是要写死的  表示启用gateway的负载均衡功能
+                predicates:    #此时**.xymaill.com通过网关访问的所有xymaill.com 或者xymaill.com子路径的 都会被映射到nacos-maill-product服务中
+                   - Host=search.xymaill.com
+server:
+    port: 88
+
+#  http://localhost:88/api/product/category/list/tree   http://localhost:10000/maillproduct/category/list/tree  需要把api重写为xy_admin/$\{segment}
+#/api/**请求过来  网关会先找lb://xy-admin  然后 根据xy-admin找到 具体地址：http://localhost:8080/ 然后后面接上/api/** 所以要把后面的/api转为 自己的项目名称 才能正常访问到
+#/xy_admin/ 左斜杠的是要被替换的 右斜杠的就是要保留的东西
