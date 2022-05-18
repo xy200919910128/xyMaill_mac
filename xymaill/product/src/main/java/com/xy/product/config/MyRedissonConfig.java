@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 
-//@Configuration
+@Configuration
 public class MyRedissonConfig {
     /**
      * 所有redisson 使用  都要使用redisson client
@@ -21,8 +21,11 @@ public class MyRedissonConfig {
         // RedissonClient redisson = Redisson.create();
         //1.创建配置
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://172.31.25.28:6379");
+        config.useSingleServer().setAddress("redis://192.168.31.53:6379");
         //2.根据config创建出redissonClient示例
+
+        config.useSingleServer().setConnectionMinimumIdleSize(5);
+        config.useSingleServer().setPassword("xy123456");
         RedissonClient redisson = Redisson.create(config);
         return redisson;
     }

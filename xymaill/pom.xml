@@ -19,6 +19,7 @@
         <module>coupon</module>
         <module>ware</module>
         <module>renren-fast</module>
+        <module>authServer</module>
     </modules>
 
     <properties>

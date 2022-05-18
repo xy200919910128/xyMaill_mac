@@ -6,18 +6,37 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xy.common.utils.PageUtils;
 import com.xy.common.utils.Query;
 import com.xy.product.dao.SkuInfoDao;
+import com.xy.product.entity.SkuImagesEntity;
 import com.xy.product.entity.SkuInfoEntity;
+import com.xy.product.entity.SpuInfoDescEntity;
+import com.xy.product.service.AttrGroupService;
+import com.xy.product.service.SkuImagesService;
 import com.xy.product.service.SkuInfoService;
+import com.xy.product.service.SpuInfoDescService;
+import com.xy.product.vo.SkuInfoVo;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
 
 
 @Service("skuInfoService")
 public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> implements SkuInfoService {
+
+    @Autowired
+    private SkuImagesService skuImagesService;
+    @Autowired
+    private SpuInfoDescService spuInfoDescService;
+    @Autowired
+    private AttrGroupService attrGroupService;
+    @Autowired
+    private ThreadPoolExecutor threadPoolExecutor;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -94,6 +113,48 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
         QueryWrapper<SkuInfoEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("spu_id",spuId);
         return this.list(queryWrapper);
+    }
+
+    @Override
+    //方法需要用线程池
+    public SkuInfoVo item(Long skuId) {
+        SkuInfoVo skuInfoVo = new SkuInfoVo();
+
+        CompletableFuture<SkuInfoEntity> skuInfoEntityCompletableFuture =  CompletableFuture.supplyAsync(()->{
+            SkuInfoEntity skuInfoEntity = this.getById(skuId);
+            //get sku 基本信息 pms_sku_info
+            skuInfoVo.setSkuInfoEntity(skuInfoEntity);
+            return skuInfoEntity;
+        },threadPoolExecutor);
+
+        CompletableFuture<Void> spuInfoDescCompletableFuture = skuInfoEntityCompletableFuture.thenAcceptAsync((res)->{
+            //get  spu 的介绍
+            skuInfoVo.setSpuInfoDescEntity(spuInfoDescService.getById(res.getSpuId()));
+        },threadPoolExecutor);
+
+
+        CompletableFuture<Void> spuAttrVoFuture = skuInfoEntityCompletableFuture.thenAcceptAsync((SkuInfoEntity skuInfoEntity)->{
+            skuInfoVo.setBaseSpuAttrVoLIst(attrGroupService.getAttrGroupWithAttrsBySkuInfoEntity(skuInfoEntity));
+        },threadPoolExecutor);
+
+
+        CompletableFuture<Void> skuImageCompletableFuture = CompletableFuture.runAsync(()->{
+            //get sku 图片信息 pms_sku_images
+            QueryWrapper<SkuImagesEntity> queryWrapper = new QueryWrapper();
+            queryWrapper.eq("sku_id",skuId);
+            skuInfoVo.setSkuImagesEntityList(skuImagesService.list(queryWrapper));
+        },threadPoolExecutor);
+
+        //get spu 销售属性集合
+
+        try {
+            CompletableFuture.allOf(skuInfoEntityCompletableFuture,spuInfoDescCompletableFuture,spuAttrVoFuture,skuImageCompletableFuture).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return skuInfoVo;
     }
 
 }

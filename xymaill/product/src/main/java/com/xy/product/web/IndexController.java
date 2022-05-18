@@ -1,5 +1,6 @@
 package com.xy.product.web;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.alibaba.nacos.common.util.UuidUtils;
 import com.xy.product.entity.CategoryEntity;
 import com.xy.product.service.CategoryService;
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.Map;
@@ -22,8 +26,8 @@ public class IndexController {
 
     @Autowired
     private  CategoryService categoryService;
-//    @Autowired
-//    private RedissonClient redissonClient;
+    @Autowired
+    private RedissonClient redissonClient;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
@@ -35,6 +39,15 @@ public class IndexController {
         model.addAttribute("categoryEntitys",categoryEntityList);
         return "index";
     }
+
+    @GetMapping("/testGet")
+    public RedirectView testGet() {
+        RedirectView redirectTarget = new RedirectView();
+        redirectTarget.setContextRelative(true);
+        redirectTarget.setUrl("http://www.baidu.com");
+        return redirectTarget;
+    }
+
 
     @GetMapping("/index/json/catalog")
     @ResponseBody

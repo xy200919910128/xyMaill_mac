@@ -1018,11 +1018,9 @@
                     <!--综合排序-->
                     <div class="filter_top">
                         <div class="filter_top_left">
-                            <a href="#">综合排序</a>
-                            <a href="#">销量</a>
-                            <a href="#">价格</a>
-                            <a href="#">评论分</a>
-                            <a href="#">上架时间</a>
+                            <a class="sort_a" sort="hotScore"  href="#">综合排序</a>
+                            <a class="sort_a" sort="saleCount" href="#">销量</a>
+                            <a class="sort_a" sort="skuPrice" href="#">价格</a>
                         </div>
                         <div class="filter_top_right">
                             <span class="fp-text">
@@ -1153,7 +1151,7 @@
                                 <a href="#">关注</a>
                             </div>
                             <p class="da">
-                                <a th:href="${'http://item.xymaill.com:8013/product/'+prod.getSkuId()+'.html'}">
+                                <a th:href="|http://item.xymaill.com:8013/product/${prod.getSkuId()}.html|">
                                     <img th:src="${prod.skuImg}" class="dim">
                                 </a>
                             </p>
@@ -1962,6 +1960,30 @@
     function searchKeyWard(){
         searchPro('keyword',$('#keyWord_input').val());
     }
+
+    $(".sort_a").click(function(){
+        //初始化样式
+        $(".sort_a").css({"color":"#333","border-color":"#CCC","background":"#FFF"});
+        var textAll = $(this).text().replace("⬆️","").replace("⬇️️","");
+        $(".sort_a").text(textAll);
+        //增加红色
+        $(this).css({"color":"#FFF","border-color":"#e4393c","background":"#e4393c"});
+        $(this).toggleClass("desc");
+        if($(this).hasClass("desc")){
+            var text = $(this).text().replace("⬆️","").replace("⬇️️","");
+            $(this).text(text+"⬆️");
+            var sort = $(this).attr("sort");
+            searchPro("sort",sort+"_asc");
+        }else{
+            var text = $(this).text().replace("⬆️","").replace("⬇️️","");
+            $(this).text(text+"⬇️️");
+            var sort = $(this).attr("sort");
+            searchPro("sort",sort+"_desc");
+        }
+
+
+        return false;
+    })
 
 
 </script>

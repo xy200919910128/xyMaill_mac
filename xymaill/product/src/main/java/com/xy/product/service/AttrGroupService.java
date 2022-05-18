@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xy.common.utils.PageUtils;
 import com.xy.product.entity.AttrEntity;
 import com.xy.product.entity.AttrGroupEntity;
+import com.xy.product.entity.SkuInfoEntity;
 import com.xy.product.vo.AttrGroupWithAttrsVo;
 import com.xy.product.vo.AttrIdVoEntity;
+import com.xy.product.vo.SkuInfoVo;
 
 import java.util.List;
 import java.util.Map;
@@ -28,5 +30,7 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     void delete(List<AttrIdVoEntity> attrIdVoEntityList);
 
     List<AttrGroupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(Long catelogId);
+
+    List<SkuInfoVo.BaseSpuAttrVo> getAttrGroupWithAttrsBySkuInfoEntity(SkuInfoEntity skuInfoEntity);
 }
 

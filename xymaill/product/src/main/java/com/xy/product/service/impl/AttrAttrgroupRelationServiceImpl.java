@@ -1,5 +1,6 @@
 package com.xy.product.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +12,7 @@ import com.xy.product.service.AttrAttrgroupRelationService;
 import com.xy.product.vo.AttrGroupRelationVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,13 @@ public class AttrAttrgroupRelationServiceImpl extends ServiceImpl<AttrAttrgroupR
             return relationEntity;
         }).collect(Collectors.toList());
         this.saveBatch(collect);
+    }
+
+    @Override
+    public List<AttrAttrgroupRelationEntity> getAttrgroupRelationListBygroupIdList(List<Long> groupIdList) {
+        LambdaQueryWrapper<AttrAttrgroupRelationEntity> lambdaQueryWrapper = new LambdaQueryWrapper();
+        lambdaQueryWrapper.in(!CollectionUtils.isEmpty(groupIdList),AttrAttrgroupRelationEntity::getAttrGroupId,groupIdList);
+        return this.list(lambdaQueryWrapper);
     }
 
 }

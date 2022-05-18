@@ -1,0 +1,37 @@
+{
+  "groups": [
+    {
+      "name": "spring1.cache1",
+      "type": "com.xy.product.config.MyProperTiesConfig",
+      "sourceType": "com.xy.product.config.MyProperTiesConfig"
+    },
+    {
+      "name": "xymaill",
+      "type": "com.xy.product.config.MyThredConfigProperties",
+      "sourceType": "com.xy.product.config.MyThredConfigProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "spring1.cache1.type1",
+      "type": "java.lang.String",
+      "sourceType": "com.xy.product.config.MyProperTiesConfig"
+    },
+    {
+      "name": "xymaill.core-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.xy.product.config.MyThredConfigProperties"
+    },
+    {
+      "name": "xymaill.keep-alive",
+      "type": "java.lang.Integer",
+      "sourceType": "com.xy.product.config.MyThredConfigProperties"
+    },
+    {
+      "name": "xymaill.max-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.xy.product.config.MyThredConfigProperties"
+    }
+  ],
+  "hints": []
+}

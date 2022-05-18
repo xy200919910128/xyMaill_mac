@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xy.product.dao.Test1Dao">
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.xy.product.entity.Test1Entity" id="idMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="generate" column="generate"/>
+    </resultMap>
+
+
+    <select id="getCanSearch1"  resultMap="idMap">
+        select * from test1 where id in
+        <foreach collection="attrIds" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+</mapper>

@@ -6,6 +6,7 @@ import com.xy.product.entity.SkuInfoEntity;
 
 import java.util.List;
 import java.util.Map;
+import com.xy.product.vo.SkuInfoVo;
 
 /**
  * sku信息
@@ -23,5 +24,7 @@ public interface SkuInfoService extends IService<SkuInfoEntity> {
     PageUtils queryPageByCondition(Map<String, Object> params);
 
     List<SkuInfoEntity> getSkusBySpuId(Long spuId);
+
+    SkuInfoVo item(Long skuId);
 }
 

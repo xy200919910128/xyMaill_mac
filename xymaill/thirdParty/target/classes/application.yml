@@ -6,7 +6,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.31.25.28:8848
+        server-addr: 192.168.31.53:8848
     alicloud:        #oss对象存储
       access-key: LTAI5tRsSAiZprDS5pcCMNmD  #oss对象存储  access-key 可以在头像 accesskey 管理里面找到  然后使用子 对应得 secret-key
       secret-key: LUmx2ZNNIr2qz84RoRpLTQFBXqNJ3D

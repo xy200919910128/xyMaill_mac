@@ -12,6 +12,7 @@
         <module name="common" />
         <module name="coupon" />
         <module name="member" />
+        <module name="authServer" />
         <module name="orders" />
         <module name="ware" />
         <module name="renren-fast" />
