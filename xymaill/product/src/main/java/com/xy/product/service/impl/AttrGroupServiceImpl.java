@@ -127,15 +127,18 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
         List<SkuInfoVo.BaseSpuAttrVo> baseSpuAttrVoList = null;
         Map<Long, SkuInfoVo.BaseAttrVo> attrIdAndBaseAttrVoMap = null;
         if(skuInfoEntity!=null){
-
             Long spuId = skuInfoEntity.getSpuId();
             Long catalogId = skuInfoEntity.getCatalogId();
+
             LambdaQueryWrapper<AttrGroupEntity> lambdaQueryWrapper = new LambdaQueryWrapper();
             lambdaQueryWrapper.eq(catalogId!=null,AttrGroupEntity::getCatelogId,catalogId);
+            //get 分组信息
             List<AttrGroupEntity> attrGroupEntityList = this.list(lambdaQueryWrapper);
             if(!CollectionUtils.isEmpty(attrGroupEntityList)){
+                //根据spu id 获得spu的所有信息
                 List<ProductAttrValueEntity> productAttrValueEntityList = productAttrValueService.list(new LambdaQueryWrapper<ProductAttrValueEntity>().eq(spuId!=null,ProductAttrValueEntity::getSpuId,spuId));
                 if(!CollectionUtils.isEmpty(productAttrValueEntityList)){
+                    //将 productAttrValueEntityList 分组 并返回 Map<Long, SkuInfoVo.BaseAttrVo>
                     attrIdAndBaseAttrVoMap = productAttrValueEntityList.stream().collect(Collectors.groupingBy(ProductAttrValueEntity::getAttrId)).
                             entrySet().stream().collect(Collectors.toMap((pro)->pro.getKey(),(pro)->{
                         SkuInfoVo.BaseAttrVo baseAttrVo = new SkuInfoVo.BaseAttrVo();
@@ -148,16 +151,19 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
                     },(k1,k2)->k1));
 
                 }
+                //获取 分组信息 并返回 Map<Long,String> attrGroupMap
                 Map<Long,String> attrGroupMap = attrGroupEntityList.stream().collect(
                         Collectors.toMap(AttrGroupEntity::getAttrGroupId,
                                 AttrGroupEntity::getAttrGroupName,
                                 (k1,k2)->{return k1;})
                 );
+                //查询当前分组下有哪些规格属性 id
                 List<Long> groupIdList = attrGroupEntityList.stream().map((attrGroupEntity)->{
                     return attrGroupEntity.getAttrGroupId();
                 }).distinct().collect(Collectors.toList());
                 List<AttrAttrgroupRelationEntity> attrAttrgroupRelationEntityList =  attrgroupRelationService.getAttrgroupRelationListBygroupIdList(groupIdList);
 
+                //将Map<Long, SkuInfoVo.BaseAttrVo> 转成list
                 final List<SkuInfoVo.BaseAttrVo> baseAttrVoList =  attrIdAndBaseAttrVoMap.entrySet().stream().map((attrMap)->{
                     return   attrMap.getValue();
                 }).collect(Collectors.toList());

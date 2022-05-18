@@ -31,6 +31,7 @@ public class ItemController {
     public String indexPage(@PathVariable("skuId") Long skuId, Model model) {
         System.out.println("查询商品详情"+skuId);
         SkuInfoVo skuInfoVo = skuInfoService.item(skuId);
+        model.addAttribute("item",skuInfoVo);
         return "item";
     }
 

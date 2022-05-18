@@ -42,7 +42,7 @@ public class SkuInfoVo {
          */
         private String attrName;
 
-        private List<String> attrValues;
+        private List<AttrValuesWithSkuIds> attrValuesWithSkuIdsList;
     }
 
     @Data
@@ -64,6 +64,19 @@ public class SkuInfoVo {
         private String attrName;
 
         private List<String> attrValues;
+    }
+
+    @Data
+    public static  class  AttrValuesWithSkuIds {
+        /**
+         * 属性值
+         */
+        private String attrValue;
+        /**
+         * 属性值属于哪些skuIds
+         */
+        private List<Long> skuIds;
+
     }
 
 }

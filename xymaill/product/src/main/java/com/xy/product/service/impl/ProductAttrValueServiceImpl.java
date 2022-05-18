@@ -7,7 +7,9 @@ import com.xy.common.utils.PageUtils;
 import com.xy.common.utils.Query;
 import com.xy.product.dao.ProductAttrValueDao;
 import com.xy.product.entity.ProductAttrValueEntity;
+import com.xy.product.entity.SkuInfoEntity;
 import com.xy.product.service.ProductAttrValueService;
+import com.xy.product.vo.SkuInfoVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

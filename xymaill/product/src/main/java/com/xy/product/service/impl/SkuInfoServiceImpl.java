@@ -9,10 +9,7 @@ import com.xy.product.dao.SkuInfoDao;
 import com.xy.product.entity.SkuImagesEntity;
 import com.xy.product.entity.SkuInfoEntity;
 import com.xy.product.entity.SpuInfoDescEntity;
-import com.xy.product.service.AttrGroupService;
-import com.xy.product.service.SkuImagesService;
-import com.xy.product.service.SkuInfoService;
-import com.xy.product.service.SpuInfoDescService;
+import com.xy.product.service.*;
 import com.xy.product.vo.SkuInfoVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
     private SpuInfoDescService spuInfoDescService;
     @Autowired
     private AttrGroupService attrGroupService;
+    @Autowired
+    private SkuSaleAttrValueService skuSaleAttrValueService;
     @Autowired
     private ThreadPoolExecutor threadPoolExecutor;
 
@@ -132,9 +131,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             skuInfoVo.setSpuInfoDescEntity(spuInfoDescService.getById(res.getSpuId()));
         },threadPoolExecutor);
 
-
+        //get spu 销售属性集合
         CompletableFuture<Void> spuAttrVoFuture = skuInfoEntityCompletableFuture.thenAcceptAsync((SkuInfoEntity skuInfoEntity)->{
             skuInfoVo.setBaseSpuAttrVoLIst(attrGroupService.getAttrGroupWithAttrsBySkuInfoEntity(skuInfoEntity));
+        },threadPoolExecutor);
+
+        CompletableFuture<Void> skuSalesAttrFuture = skuInfoEntityCompletableFuture.thenAcceptAsync((SkuInfoEntity skuInfoEntity)->{
+            skuInfoVo.setSalesAttrVoList(skuSaleAttrValueService.getSalesAttrVoList(skuInfoEntity));
         },threadPoolExecutor);
 
 
@@ -144,11 +147,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             queryWrapper.eq("sku_id",skuId);
             skuInfoVo.setSkuImagesEntityList(skuImagesService.list(queryWrapper));
         },threadPoolExecutor);
-
-        //get spu 销售属性集合
-
         try {
-            CompletableFuture.allOf(skuInfoEntityCompletableFuture,spuInfoDescCompletableFuture,spuAttrVoFuture,skuImageCompletableFuture).get();
+            CompletableFuture.allOf(skuInfoEntityCompletableFuture,spuInfoDescCompletableFuture,spuAttrVoFuture,skuSalesAttrFuture,skuImageCompletableFuture).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

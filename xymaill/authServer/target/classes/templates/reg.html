@@ -4,8 +4,8 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>gulimall注册页面</title>
-		<script src="libs/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
-		<script src="js/jQuery/jquery-3.1.1.js"></script>
+		<script src="/static/regist/libs/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/static/regist/js/jQuery/jquery-3.1.1.js"></script>
 		<link rel="stylesheet" type="text/css" href="/static/regist/bootStrap//static/regist/bootStrap//static/regist/css/bootstrap.css" />
 		<link rel="stylesheet" type="text/css" href="/static/regist/sass/index.css" />
 		<link rel="stylesheet" type="text/css" href="/static/regist/css/index.css">
@@ -5045,8 +5045,8 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
 				</div>
 				<div class="register-box">
 					<label for="username" class="other_label">验 证 码
-			<input maxlength="20" type="text" placeholder="请输入验证码" class="caa">
-			</label>
+						<a id="sendCode"  onclick="sendCode()" href="javascript:;">请发送验证码 </a>
+				</label>
 					<span id="code"></span>
 					<div class="tips">
 
@@ -5302,6 +5302,29 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
 			$(".cuo").click(function() {
 				$(".zong").hide();
 			});
+
+			var num = 10;
+			function sendCode(){
+				if($("#sendCode").hasClass("dis")){
+					return ;
+				}else{
+					setTime();
+				}
+			}
+
+			function setTime(){
+				$("#sendCode").attr("class","dis");
+				if(num==0){
+					num = 10;
+					$("#sendCode").attr("class","")
+					$("#sendCode").text("发送验证码");
+				}else{
+					$("#sendCode").text(num+"秒后重发");
+					setTimeout('setTime()',1000);
+				}
+				num--;
+			}
+
 		</script>
 	</body>
 

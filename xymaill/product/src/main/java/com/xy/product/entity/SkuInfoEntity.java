@@ -1,5 +1,6 @@
 package com.xy.product.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -32,6 +33,10 @@ public class SkuInfoEntity implements Serializable {
 	 * sku名称
 	 */
 	private String skuName;
+	//有货无货
+
+	@TableField(exist = false)
+	private Boolean hasStock = Boolean.TRUE;
 	/**
 	 * sku介绍描述
 	 */

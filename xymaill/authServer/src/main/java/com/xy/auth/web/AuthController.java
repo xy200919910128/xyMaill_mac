@@ -14,26 +14,4 @@ import java.util.List;
 @Controller
 public class AuthController {
 
-    @GetMapping("/regist")
-    public String toRegist() {
-        return "reg";
-    }
-
-
-    @ResponseBody
-    @PostMapping("/testList")
-    public String testList(@RequestBody List<String> ids) {
-        System.out.println(ids.get(0));
-        return "bbb";
-    }
-
-
-    @ResponseBody
-    @PostMapping("/testList1")
-    public String testList1(@RequestBody List<User> users) {
-        System.out.println(users.get(0).getName());
-        return "bbb";
-    }
-
-
 }

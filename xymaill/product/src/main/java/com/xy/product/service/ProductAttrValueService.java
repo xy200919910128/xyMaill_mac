@@ -3,6 +3,8 @@ package com.xy.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xy.common.utils.PageUtils;
 import com.xy.product.entity.ProductAttrValueEntity;
+import com.xy.product.entity.SkuInfoEntity;
+import com.xy.product.vo.SkuInfoVo;
 
 import java.util.List;
 import java.util.Map;
