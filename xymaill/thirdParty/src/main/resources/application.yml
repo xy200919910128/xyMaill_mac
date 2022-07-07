@@ -12,5 +12,11 @@ spring:
         endpoint: oss-cn-beijing.aliyuncs.com  #oss对象存储 要上传得对象存储得endpoint  选择外网能访问的    要使用oss  需要在项目中引种oss得stater 此项目在common包中
         bucket-name: xymaill
 
-
+com:
+  xy:
+    sms:
+      host: https://zwp.market.alicloudapi.com
+      path: /sms/sendv2
+      method: GET
+      appcode: 79c70fe5f9354466909852d6da312523
 #用户登录名称 xymaill@1994798319340492.onaliyun.com

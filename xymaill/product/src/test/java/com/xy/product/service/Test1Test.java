@@ -30,13 +30,8 @@ public class Test1Test {
         user.setName("xy");
         user.setGenerate("男");
         //test1Service.save(user);
-
         List<Long> ids = Arrays.asList(1l,2l,3l);
-
-
-
         System.out.println(test1Service.getCanSearch(ids));
-
         //System.out.println(attrService.getCanSearch(ids));
 
 

@@ -5,12 +5,10 @@ import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
 import com.xy.common.utils.R;
+import com.xy.maillThirdParty.component.SmsComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +25,10 @@ import java.util.Map;
 public class ThirtyPartyController {
     @Autowired
     private OSS ossClient;
+
+    @Autowired
+    private SmsComponent smsComponent;
+
     String simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
     @Value("${spring.cloud.alicloud.oss.endpoint}")
@@ -110,5 +112,12 @@ public class ThirtyPartyController {
         URL url = ossClient.generatePresignedUrl(getBucket(), key, expiration);
         return R.ok().put("url",url);
     }
+
+    @GetMapping("/sendSms")
+    public void sendSms(@RequestParam("phone") String phone,@RequestParam("code") String code) {
+        smsComponent.sendSms(phone,code);
+    }
+
+
 
 }

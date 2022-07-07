@@ -4,7 +4,8 @@ public enum BizCode {
     UNKNOWN_EXCEPTION(10000,"未知异常"),
     RUNTIME_EXCEPTION(10001,"程序运行的异常"),
     VALID_EXCEPTION(10002,"数据校验异常"),
-    PRODUCT_UP_EXCEPTION(11000,"商品上架异常");
+    SMS_VALID_EXCEPTION(11001,"短信验证码频率过快异常"),
+    PRODUCT_UP_EXCEPTION(12000,"商品上架异常");
 
     private Integer code;
     private String msg;
