@@ -17,14 +17,28 @@ spring:
       prefix: classpath:/templates/
       suffix: .html
   redis:
-    host: 192.168.31.53
     port: 6379
     password: xy123456
+    host: 192.168.31.53
+  rabbitmq:
+    host: 192.168.31.53
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      mandatory: true
+    listener:
+      simple:
+        acknowledge-mode: manual
 server-url:
   nacos-user-service: http://maill-product
 
 server:
   port: 10000
+
 
 mybatis-plus:
   mapper-locations: mapper/*.xml

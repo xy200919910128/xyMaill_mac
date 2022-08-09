@@ -23,7 +23,8 @@ public class SendCodeServiceImpl implements  SendCodeService{
     private StringRedisTemplate stringRedisTemplate;
     @Override
     public R sendMsg(String phone) {
-        String num = RandomCodeUtils.getRandNumber(4);
+//        String num = RandomCodeUtils.getRandNumber(4);
+        String num = "1234";
 
         String code = stringRedisTemplate.opsForValue().get(RedisKeyConstant.smsRedisKey+phone);
 

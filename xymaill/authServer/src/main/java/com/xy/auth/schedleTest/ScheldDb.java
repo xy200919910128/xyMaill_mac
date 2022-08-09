@@ -10,7 +10,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
-@EnableScheduling  //开启spring 定时任务注解
+//@EnableScheduling  //开启spring 定时任务注解
 @Component
 @Slf4j
 public class ScheldDb implements SchedulingConfigurer {
@@ -25,7 +25,6 @@ public class ScheldDb implements SchedulingConfigurer {
 
                 () -> {
                     //执行业务方法 ... 异步 @@EnableAsync @Async
-
                 },
 
                 //2.设置执行周期(Trigger)
@@ -34,7 +33,7 @@ public class ScheldDb implements SchedulingConfigurer {
 
                     //2.1 从数据库获取执行周期getCron 方法() 返回字符串 例子：* * * * * ？
 
-                    String cron = "* * * * * ";
+                    String cron = "* * * * 1 * ";
 
                     //2.2 合法性校验.
 

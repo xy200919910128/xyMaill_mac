@@ -6,6 +6,7 @@ import com.xy.common.validate.AddGroups;
 import com.xy.common.validate.ListValue;
 import com.xy.common.validate.UpdateGroups;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.*;
@@ -23,6 +24,7 @@ import java.io.Serializable;
  */
 @Data
 @TableName("pms_brand")
+@NoArgsConstructor
 public class BrandEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

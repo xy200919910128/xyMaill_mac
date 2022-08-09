@@ -2,6 +2,7 @@ package com.xy.auth.schedleTest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 //@EnableAsync       // 可用异步任务
 //@EnableScheduling  //开启spring 定时任务注解
@@ -35,4 +36,13 @@ public class Scheld {
 //    public void testSch(){
 //
 //    }
+
+    public static void main(String[] args){
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String encode= bCryptPasswordEncoder.encode("123asdds");
+
+        System.out.println("加密："+encode);
+
+        System.out.println(bCryptPasswordEncoder.matches("123asdds",encode));
+    }
 }

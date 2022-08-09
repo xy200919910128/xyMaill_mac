@@ -1,7 +1,9 @@
 package com.xy.member.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xy.common.to.UserRegistVo;
 import com.xy.common.utils.PageUtils;
+import com.xy.common.utils.R;
 import com.xy.member.entity.MemberEntity;
 
 import java.util.Map;
@@ -16,5 +18,7 @@ import java.util.Map;
 public interface MemberService extends IService<MemberEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    R regist(UserRegistVo userRegistVo);
 }
 

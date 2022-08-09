@@ -1,5 +1,6 @@
 package com.xy.member.controller;
 
+import com.xy.common.to.UserRegistVo;
 import com.xy.common.utils.PageUtils;
 import com.xy.common.utils.R;
 import com.xy.member.entity.MemberEntity;
@@ -61,12 +62,10 @@ public class MemberController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/regist")
     //@RequiresPermissions("member:member:save")
-    public R save(@RequestBody MemberEntity member){
-		memberService.save(member);
-
-        return R.ok();
+    public R regist(@RequestBody UserRegistVo userRegistVo){
+        return memberService.regist(userRegistVo);
     }
 
     /**
